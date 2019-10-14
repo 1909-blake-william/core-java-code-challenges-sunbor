@@ -1,6 +1,8 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +33,23 @@ public class EvaluationService {
 	 */
 	public String acronym(String phrase) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		//make new answer string
+		//add first letter of phrase to answer
+		//iterate through each char of phrase
+		//if space or dash, add next char to answer
+		//turn to all caps
+		String answer = "";
+		answer += phrase.charAt(0);
+		System.out.println(answer);
+		for(int i=0; i<phrase.length(); i++) {
+			if(phrase.charAt(i) == ' ' || phrase.charAt(i) == '-') {
+				if(i != phrase.length() - 1) {
+					answer += phrase.charAt(i+1);
+				}
+			}
+		}
+		answer = answer.toUpperCase();
+		return answer;
 	}
 
 	/**
@@ -82,20 +100,33 @@ public class EvaluationService {
 		public void setSideThree(double sideThree) {
 			this.sideThree = sideThree;
 		}
-
+		
+		//1==3
+		//1==2
+		//2==3
+		public int numEqual() {
+			int numEqual = 0;
+			if(sideOne == sideTwo) {
+				numEqual++;
+			}
+			if(sideOne == sideThree) {
+				numEqual++;
+			}
+			if(sideTwo == sideThree) {
+				numEqual++;
+			}
+			return numEqual;
+		}
 		public boolean isEquilateral() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			return numEqual() == 3 ? true : false;
 		}
 
 		public boolean isIsosceles() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			return numEqual() == 1 ? true : false;
 		}
 
 		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			return numEqual() == 0 ? true : false;
 		}
 
 	}
@@ -116,8 +147,55 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		//turn input string into lower case
+		string = string.toLowerCase();
+		int score = 0;
+		for(int i=0; i<string.length(); i++) {
+			score += getLetterScore(string.charAt(i));
+		}
+
+		return score;
+	}
+	
+	public int getLetterScore(char letter) {
+		//index 0-9 1 point
+		//index 10-11 2 points
+		//index 12-15 3 points
+		//index 16-20 4 points
+		//index 21 5 points
+		//index 22-23 8 points
+		//index 24-25 10 points
+		String letterScores = "aeioulnrstdgbcmpfhvwykjxqz";
+		int index = letterScores.length();
+		for(int i=0; i<letterScores.length(); i++) {
+			if(letter == letterScores.charAt(i)) {
+				index = i;
+			}
+		}
+		if(index >= 0 && index <= 9) {
+			return 1;
+		}
+		else if(index == 10 || index == 11) {
+			return 2;
+		}
+		else if(index >= 12 && index <= 15) {
+			return 3;
+		}
+		else if(index >= 16 && index <= 20) {
+			return 4;
+		}
+		else if(index == 21) {
+			return 5;
+		}
+		else if(index == 22 || index == 23) {
+			return 8;
+		}
+		else if(index == 24 || index == 25) {
+			return 10;
+		}
+		else {
+			return 0;
+		}	
 	}
 
 	/**
@@ -151,9 +229,34 @@ public class EvaluationService {
 	 * Note: As this exercise only deals with telephone numbers used in
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
-	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+	public String cleanPhoneNumber(String string) throws IllegalArgumentException{
+		//make new answer string
+		//go through input string
+		//if char at i is a number from 0-9 (ascii 48-57), add to answer string
+		//if answer string length is not 10 or 11, return false
+		//if answer string length is 11 and first digit is not 1, return false
+		//if answer string length is 11, remove first digit
+		//if 1st or 4th digit are 0 or 1, return false
+		StringBuilder answer = new StringBuilder("");
+		for(int i=0; i<string.length(); i++) {
+			if(string.charAt(i) >= 48 && string.charAt(i) <= 57) {
+				answer.append(string.charAt(i));
+			}
+		}
+		if(answer.length() != 10 && answer.length() != 11)
+			throw new IllegalArgumentException();
+		if(answer.length() == 11) {
+			if(answer.charAt(0) != 1)
+				throw new IllegalArgumentException();
+			answer.deleteCharAt(0);
+		}
+		if(answer.charAt(0) == 0 || answer.charAt(0) == 1) {
+			throw new IllegalArgumentException();
+		}
+		if(answer.charAt(3) == 0 || answer.charAt(3) == 1) {
+			throw new IllegalArgumentException();
+		}
+		return answer.toString();
 	}
 
 	/**
@@ -166,8 +269,24 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		//split string into array
+		//for each element of array
+		//if string is not already in map, add to map and set number to 1
+		//if already in map, increment number by 1
+		//if string is empty string, do not add to map
+		String[] stringArray = string.split("[ ,\\s]");
+		Map<String, Integer> answer = new HashMap<String, Integer>();
+		for(int i=0; i<stringArray.length; i++) {
+			if(!"".equals(stringArray[i])) {
+				if(!answer.containsKey(stringArray[i])) {
+					answer.put(stringArray[i], 1);
+				}
+				else {
+					answer.replace(stringArray[i], answer.get(stringArray[i]) + 1);
+				}
+			}
+		}
+		return answer;
 	}
 
 	/**
@@ -246,10 +365,118 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String toPigLatin(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		//turn string into array of words
+		//for each word, turn to pig latin and add to new string
+		String[] sentenceArray = string.split(" ");
+		String answer = "";
+		answer += wordToPigLatin(sentenceArray[0]);
+		for(int i=1; i<sentenceArray.length; i++) {
+			answer += " " + wordToPigLatin(sentenceArray[i]);
+		}
+		return answer;
+	}
+	/**
+	 * 
+	 * @param letter the letter to check if vowel or not
+	 * @param countY whether or not y counts as a vowel
+	 * @return true if vowel false if not
+	 */
+	public boolean isVowel(char letter, boolean countY) {
+		switch(letter){
+		case 'a':
+			return true;
+		case 'e':
+			return true;
+		case 'i':
+			return true;
+		case 'o':
+			return true;
+		case 'u':
+			return true;
+		case 'y':
+			if(countY)
+				return true;
+			else
+				return false;
+		default:
+			return false;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param a single word to turn to pig latin
+	 * @return a single word in pig latin
+	 */
+	public String wordToPigLatin(String string) {
+		//check if first letter is a vowel (not including y)
+		//if so, add "ay" to end and return
+		//if not, find first vowel (including y in word)
+		//get index of first vowel
+		//remove and store all letters between start and first vowel
+		//add to end of word
+		//add ay
+		StringBuilder answer = new StringBuilder("");
+		answer.append(string);
+		
+		//check if first letter is vowel
+		//likely don't actually need this part
+		if(isVowel(string.charAt(0), false)) {
+			//if yes, add ay to end
+			string += "ay";
+		}
+		//if not
+		else {
+			//edge cases							//can add more edge cases 
+			//first letter is y
+			//start loop from second letter
+			//first two letters are qu
+			//start loop from third letter
+			//get index of first vowel
+			
+			//first letter is y
+			int vowelIndex = -1;
+			if(string.charAt(0) == 'y') {
+				for(int i=1; i<string.length(); i++) {
+					if(isVowel(string.charAt(i), true)) {
+						vowelIndex = i;
+						break;
+					}
+				}
+			}
+			//first two letters are qu
+			else if(string.charAt(0) == 'q' && string.charAt(1) == 'u') {
+				for(int i=2; i<string.length(); i++) {
+					if(isVowel(string.charAt(i), true)) {
+						vowelIndex = i;
+						break;
+					}
+				}
+			}
+			//non edge case
+			else {
+				for(int i=0; i<string.length(); i++) {
+					if(isVowel(string.charAt(i), true)){
+						vowelIndex = i;
+						break;
+					}
+				}
+			}
+			//input has no vowels
+			if(vowelIndex == -1) {
+				return "go away";
+			}
+			//remove and store all letters between start and first vowel
+			String firstLetters = string.substring(0,  vowelIndex);
+			string = string.substring(vowelIndex);
+			//add letters to end of word
+			//add ay
+			string += firstLetters + "ay";
+		}
+		return string;
 	}
 
+	
 	/**
 	 * 9. An Armstrong number is a number that is the sum of its own digits each
 	 * raised to the power of the number of digits.
@@ -266,8 +493,37 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		//find armstrong number
+		//get each digit
+		//add digit to array
+		//while original number is not 0
+		//find remainder when divided by 10 and store as digit
+		//divide original number by 10
+		//increment counter
+		//compare to input
+		
+		int input2 = input;
+		int counter = 0;
+		List<Integer> digitList = new ArrayList<Integer>();
+		//while input2 is not 0
+		do {
+			//get remainder and add to array
+			digitList.add(input2 % 10);
+			//divide input2 by 10
+			input2 /= 10;
+		}while(input2 != 0);
+				
+		//make armstrong number
+		int armstrongSum = 0;
+		//for each element in list
+		for(int i=0; i<digitList.size(); i++) {
+			//take element to power of list size and add to sum
+			armstrongSum += Math.pow(digitList.get(i), digitList.size());
+		}
+		
+		//compare calculated sum to input
+		return armstrongSum == input ? true : false;
+		
 	}
 
 	/**
@@ -281,8 +537,45 @@ public class EvaluationService {
 	 * @return
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		//if number is prime, return list containing only that number
+		//if not, find each multiple, then recursively call this function using that multiple
+		if(isPrime(l)) {
+			List<Long> prime = new ArrayList<Long>();
+			prime.add(l);
+			return prime;
+		}
+		else {
+			//make empty list
+			List<Long> multiples = new ArrayList<Long>();
+			//find a factor
+			long factor = - 1;
+			for(int i=2; i<l; i++) {
+				//check if multiple
+				if(l % i == 0) {
+					factor = i;
+					break;
+				}
+			}
+			//add factor to list
+			multiples.add(factor);
+			//find the factor that the first factor is multiplied by
+			long otherFactor = l/factor;
+			//call recursive function on other factor
+			multiples.addAll(calculatePrimeFactorsOf(otherFactor));
+			return multiples;
+		}
+	}
+	
+	public boolean isPrime(long l) {
+		//if even number, return false
+		if(l % 2 == 0)
+			return false;
+		//if multiple found, return false
+		for(int i=2; i<l/2+1; i++) {
+			if(l % i == 0)
+				return false;
+		}
+		return true;
 	}
 
 	/**
@@ -320,8 +613,36 @@ public class EvaluationService {
 		}
 
 		public String rotate(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			//uppercase: 65-90
+			//lowercase: 97-122
+			//for each character in string
+			//if not uppercase or lowercase, do nothing
+			//if uppercase, set start to 65
+			//if lowercase, set start to 97
+			//take char value, subtract start, add key, mod 26, add start
+			//add to new answer string
+			String answer = "";
+			//int start;
+			for(int i=0; i<string.length(); i++) {
+				if(string.charAt(i) >= 65 && string.charAt(i) <= 90) {
+					//start = 65;
+					//answer += (char) ((string.charAt(i) - start + key) % 26 + start);
+					answer += getRotatedChar(string.charAt(i), 65, key);
+				}
+				else if(string.charAt(i) >= 97 && string.charAt(i) <= 122) {
+					//start = 97;
+					//answer += (char) ((string.charAt(i) - start + key) % 26 + start);
+					answer += getRotatedChar(string.charAt(i), 97, key);
+				}
+				else {
+					answer += string.charAt(i);
+				}
+			}
+			return answer;
+		}
+		
+		public char getRotatedChar(char initial, int start, int key) {
+			return (char) ((initial - start + key) % 26 + start);
 		}
 
 	}
@@ -338,9 +659,23 @@ public class EvaluationService {
 	 * @param i
 	 * @return
 	 */
-	public int calculateNthPrime(int i) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+	public int calculateNthPrime(int i) throws IllegalArgumentException{
+		//while counter is less than i
+		//call isPrime
+		//if is prime, increment counter
+		//increment counter
+		if(i <= 0) {
+			throw new IllegalArgumentException();
+		}
+		int counter = 2;
+		int primeCounter = 1;
+		while(primeCounter < i) {
+			counter++;
+			if(isPrime(counter)) {
+				primeCounter++;
+			}
+		}
+		return counter;
 	}
 
 	/**
@@ -376,6 +711,15 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String encode(String string) {
+			//turn string to all lowercase
+			//if char code is between 97-122
+			//new char code is 122-original+97
+			//add char to charArray
+			//add spaces to charArray
+			//for each char in charArray
+			//add to answer array
+			//if multiple of 5th digit
+			//add space
 			// TODO Write an implementation for this method declaration
 			return null;
 		}
