@@ -40,7 +40,6 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String acronym(String phrase) {
-		// TODO Write an implementation for this method declaration
 		//make new answer string
 		//add first letter of phrase to answer
 		//iterate through each char of phrase
@@ -365,7 +364,6 @@ public class EvaluationService {
 				else
 					right = middle;
 			}
-			// TODO Write an implementation for this method declaration
 			return -1;
 		}
 
@@ -838,7 +836,6 @@ public class EvaluationService {
 					answer += string.charAt(i);
 				}
 			}
-			// TODO Write an implementation for this method declaration
 			return answer;
 		}
 	}
@@ -1018,10 +1015,6 @@ public class EvaluationService {
 		for(int badName : multiples) {
 			sum += badName;
 		}
-		
-		
-		
-		// TODO Write an implementation for this method declaration
 		return sum;
 	}
 
@@ -1181,7 +1174,6 @@ public class EvaluationService {
 //			System.out.println(operands.get(i));
 //		}
 		//see if one of the words is an operation
-		// TODO Write an implementation for this method declaration
 		return result;
 	}
 
