@@ -1,10 +1,18 @@
 package com.revature.eval.java.core;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class EvaluationService {
 
@@ -40,7 +48,7 @@ public class EvaluationService {
 		//turn to all caps
 		String answer = "";
 		answer += phrase.charAt(0);
-		System.out.println(answer);
+		//System.out.println(answer);
 		for(int i=0; i<phrase.length(); i++) {
 			if(phrase.charAt(i) == ' ' || phrase.charAt(i) == '-') {
 				if(i != phrase.length() - 1) {
@@ -324,12 +332,41 @@ public class EvaluationService {
 	 * binary search is a dichotomic divide and conquer search algorithm.
 	 * 
 	 */
-	static class BinarySearch<T> {
+	static class BinarySearch<T extends Comparable<T>> {
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
+			//set left and right indices
+			//find middle element of array
+			//compare t to middle of array
+			//if same, return index
+			//if t is greater, set left index to middle
+			//if t is less, set right index to middle
+			//repeat until array size is too small
+			
+			int left = 0;
+			int right = sortedList.size()-1;
+			int middle;
+			
+			//while list hasnt folded in on itself
+			while(left <= right) {
+				
+				//find index of middle
+				middle = left + (right - left)/2;
+				
+				//System.out.println(left + " " + middle + " " + right);
+				
+				//compare t to middle
+				if(t.compareTo(sortedList.get(middle)) == 0)
+					return middle;
+				else if(t.compareTo(sortedList.get(middle)) > 0) {
+					left = middle + 1;
+				}
+				else
+					right = middle;
+			}
 			// TODO Write an implementation for this method declaration
-			return 0;
+			return -1;
 		}
 
 		public BinarySearch(List<T> sortedList) {
@@ -503,7 +540,7 @@ public class EvaluationService {
 		//compare to input
 		
 		int input2 = input;
-		int counter = 0;
+		//int counter = 0;
 		List<Integer> digitList = new ArrayList<Integer>();
 		//while input2 is not 0
 		do {
@@ -566,18 +603,6 @@ public class EvaluationService {
 		}
 	}
 	
-	public boolean isPrime(long l) {
-		//if even number, return false
-		if(l % 2 == 0)
-			return false;
-		//if multiple found, return false
-		for(int i=2; i<l/2+1; i++) {
-			if(l % i == 0)
-				return false;
-		}
-		return true;
-	}
-
 	/**
 	 * 11. Create an implementation of the rotational cipher, also sometimes called
 	 * the Caesar cipher.
@@ -678,6 +703,18 @@ public class EvaluationService {
 		return counter;
 	}
 
+	public boolean isPrime(long l) {
+		//if even number, return false
+		if(l > 2 && l % 2 == 0)
+			return false;
+		//if multiple found, return false
+		for(int i=2; i<=Math.sqrt(l); i++) {
+			if(l % i == 0)
+				return false;
+		}
+		return true;
+	}
+	
 	/**
 	 * 13 & 14. Create an implementation of the atbash cipher, an ancient encryption
 	 * system created in the Middle East.
@@ -720,9 +757,59 @@ public class EvaluationService {
 			//add to answer array
 			//if multiple of 5th digit
 			//add space
-			// TODO Write an implementation for this method declaration
-			return null;
+			
+			//turn string to lower case
+			string = string.toLowerCase();
+			//for each char in string
+			String onlyLetters = "";
+			for(int i=0; i<string.length(); i++) {
+				//if char code is between 97-122 (lower case letter)
+				if(string.charAt(i) >= 97 && string.charAt(i) <= 122) {
+					//get new char: 122-original+97
+					//add to new string
+					onlyLetters += (char) (122 - string.charAt(i) + 97); 
+				}
+				//if char code is between 48-57
+				//add to string as it is
+				else if(string.charAt(i) >= 48 && string.charAt(i) <= 57) {
+					onlyLetters += string.charAt(i);
+				}
+//				onlyLetters += atbashChar(string.charAt(i));
+			}
+			
+			//add spaces every five characters
+			//unless its at the end
+			String answer = "";
+			//for each character
+			for(int i=0; i<onlyLetters.length(); i++) {
+				//copy character to answer
+				answer += onlyLetters.charAt(i);
+				//if multiple of 5, add space
+				//unless its at the end !
+				if((i+1) % 5 == 0 && i < onlyLetters.length() - 1) {
+					answer += " ";
+				}
+			}
+			return answer;
 		}
+		
+//		public static char atbashChar(char input) {
+//			//if char code is between 97-122 (lower case letter)
+//			if(input >= 97 && input <= 122) {
+//				//get new char: 122-original+97
+//				//add to new string
+//				return (char) (122 - input + 97); 
+//			}
+//			//if char code is between 48-57
+//			//add to string as it is
+//			else if(input >= 48 && input <= 57) {
+//				return input;
+//			}
+//			else {
+//				//throw exception
+//				throw new IllegalArgumentException();
+//			}
+//		}
 
 		/**
 		 * Question 14
@@ -731,8 +818,28 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String decode(String string) {
+			//for each character in string
+			//if lower case letter (97-122)
+			//convert using 122 - char code + 97
+			//add to answer
+			//if number (48-57)
+			//add to answer
+			String answer = "";
+			for(int i=0; i<string.length(); i++) {
+				//if char code is between 97-122 (lower case letter)
+				if(string.charAt(i) >= 97 && string.charAt(i) <= 122) {
+					//get new char: 122-original+97
+					//add to new string
+					answer += (char) (122 - string.charAt(i) + 97); 
+				}
+				//if char code is between 48-57
+				//add to string as it is
+				else if(string.charAt(i) >= 48 && string.charAt(i) <= 57) {
+					answer += string.charAt(i);
+				}
+			}
 			// TODO Write an implementation for this method declaration
-			return null;
+			return answer;
 		}
 	}
 
@@ -759,8 +866,52 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isValidIsbn(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		//check length of string, return false if not equal to 13
+		//check for dashes, if not in the right place (1, 5, 11) return false
+		//check digits, if first 9 not numeric, return false
+		//check last digit, if not numeric or x, return false
+		//do the calculation thing
+		
+		//check string length
+		if(string.length() != 13)
+			return false;
+		//make list to store numbers
+		List<Integer> numList = new ArrayList<Integer>();
+		//for each digit
+		for(int i=0; i<string.length(); i++) {
+			//check dashes
+			if(i == 1 || i == 5 || i == 11) {
+				if(string.charAt(i) != '-')
+					return false;
+			}
+			//check digits
+			else if(i == 0 || i >= 2 && i <= 4 || i >= 6 && i <= 10) {
+				if(!(string.charAt(i) >= 48 && string.charAt(i) <= 57))
+					return false;
+				else
+					numList.add(Character.getNumericValue(string.charAt(i)));
+			}
+			//check last digit
+			else if(i == 12)
+				if(!((string.charAt(i) >= 48 && string.charAt(i) <= 57) || string.charAt(i) == 'X'))
+					return false;
+				else {
+					if(string.charAt(i) == 'X')
+						numList.add(10);
+					else
+						numList.add(Character.getNumericValue(string.charAt(i)));
+				}
+		}
+		//System.out.println(Arrays.toString(numList.toArray()));
+		//do calculations
+		int sum = 0;
+		for(int i=0; i<numList.size(); i++) {
+			sum += numList.get(i) * (10 - i % 10);
+		}
+		if(sum % 11 !=0)
+			return false;
+		
+		return true;
 	}
 
 	/**
@@ -777,8 +928,34 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isPangram(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		//turn to lowercase
+		//make map with char and boolean
+		//for each letter in string, set value of in map to true
+		
+		//turn to lowercase
+		string = string.toLowerCase();
+		//make map of each character in alphabet
+		Map<Character, Boolean> checklist = new HashMap<Character, Boolean>();
+		//fill out map
+		for(int i=97; i<=122; i++) {
+			checklist.put((char) i, false);
+		}
+		
+		//for each character in string
+		for(int i=0; i<string.length(); i++) {
+			//set corresponding value on map to true
+			checklist.replace(string.charAt(i), false, true);
+		}
+		
+//		for(Entry<Character, Boolean> entry: checklist.entrySet()) {
+//			System.out.println("key: " + entry.getKey() + " + value: " + entry.getValue());
+//		}
+		
+		//if all values in checklist are true, return true
+		if(checklist.containsValue(false))
+			return false;
+		else
+			return true;
 	}
 
 	/**
@@ -790,8 +967,15 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Temporal getGigasecondDate(Temporal given) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		if(given instanceof LocalDate) {
+			return (((LocalDate) given).atStartOfDay()).plus(Duration.ofSeconds(1000000000));
+		}
+		else if (given instanceof LocalDateTime) {
+			return given.plus(Duration.ofSeconds(1000000000));
+		}
+		else {
+			return null;
+		}
 	}
 
 	/**
@@ -808,8 +992,37 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getSumOfMultiples(int i, int[] set) {
+		//make set of multiples
+		//for each number in input set
+		//find all multiples below limit
+		//add to set of multiples
+		//find sum of set of multiples
+				
+		//make set
+		Set<Integer> multiples = new TreeSet<Integer>();
+		
+		//for each number in input set
+		for(int j=0; j<set.length; j++) {
+			int max = i / set[j];
+			//find all multiples of that number
+			for(int k=1; k<=max; k++) {
+				multiples.add(k * set[j]);
+			}
+		}
+		
+		//remove i from set
+		multiples.remove(i);
+		
+		//sum multiples
+		int sum = 0;
+		for(int badName : multiples) {
+			sum += badName;
+		}
+		
+		
+		
 		// TODO Write an implementation for this method declaration
-		return 0;
+		return sum;
 	}
 
 	/**
@@ -849,8 +1062,53 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isLuhnValid(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		//check for invalid characters
+		//turn to array of all numbers
+		//double digits
+		//find sum
+		
+		List<Integer> numList = new ArrayList<Integer>();
+		//check for invalid characters
+		for(int i=0; i<string.length(); i++) {
+			//number or space
+			if((string.charAt(i) >= 48 && string.charAt(i) <= 57) || string.charAt(i) == 32) {
+				if(string.charAt(i) != 32) {
+					//add to new list
+					numList.add(Character.getNumericValue(string.charAt(i)));
+				}
+			}
+			//if not, return false
+			else {
+				return false;
+			}
+		}
+		
+//		for(int i=0; i<numList.size(); i++) {
+//			System.out.println(numList.get(i) + " ");
+//		}
+		
+		if(numList.size() <= 1)
+			return false;
+		
+		//double digits starting from end
+		for(int i=numList.size()-2; i>=0; i-=2) {
+			int newDigit = numList.get(i) * 2;
+			if(newDigit >= 10)
+				newDigit -= 9;
+			numList.set(i, newDigit);
+		}
+		
+		//find sum
+		int sum = 0;
+		for(int i=0; i<numList.size(); i++) {
+			sum += numList.get(i);
+		}
+		
+		//check if sum is divisible by 10
+		if(sum % 10 == 0)
+			return true;
+		else
+			return false;
 	}
 
 	/**
@@ -881,8 +1139,50 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int solveWordProblem(String string) {
+		//split string into words
+		String[] words = string.split("[ ?]");
+		//System.out.println(Arrays.toString(words));
+		//find numbers
+		//for each element in array
+		//parse int
+		//catch exception
+		List<Integer> operands = new ArrayList<Integer>();
+		for(int i=0; i<words.length; i++) {
+			try {
+				operands.add(Integer.parseInt(words[i]));
+			}
+			catch (NumberFormatException oops){
+				
+			}
+		}
+		
+		//get operator
+		int result = 0;
+		for(int i=0; i<words.length; i++) {
+			switch (words[i]) {
+			case "plus":
+				result = operands.get(0) + operands.get(1);
+				break;
+			case "minus":
+				result = operands.get(0) - operands.get(1);
+				break;
+			case "multiplied":
+				result = operands.get(0) * operands.get(1);
+				break;
+			case "divided":
+				result = operands.get(0) / operands.get(1);
+				break;
+			default:
+				break;
+			}
+		}
+		
+//		for(int i=0; i<operands.size(); i++) {
+//			System.out.println(operands.get(i));
+//		}
+		//see if one of the words is an operation
 		// TODO Write an implementation for this method declaration
-		return 0;
+		return result;
 	}
 
 }

@@ -50,7 +50,7 @@ public class MyDriver {
 //			System.out.println(i + " " + nooo.isPrime(i));
 //		}
 		
-		System.out.println(nooo.calculatePrimeFactorsOf(36));
+//		System.out.println(nooo.calculatePrimeFactorsOf(36));
 		
 //		char testValue = 'b';
 //		int key = 3;
@@ -61,15 +61,27 @@ public class MyDriver {
 //		EvaluationService.RotationalCipher oppp = new EvaluationService.RotationalCipher(25);
 //		
 //		System.out.println(oppp.rotate("NOOO"));
+//		
+//		System.out.println(nooo.calculateNthPrime(3));
+//		for(int i=1; i<7; i++) {
+//			System.out.println(i + " " + nooo.calculateNthPrime(i));
+//		}
 		
-		System.out.println(nooo.calculateNthPrime(3));
-		for(int i=1; i<7; i++) {
-			System.out.println(i + " " + nooo.calculateNthPrime(i));
-		}
+//		char testValue = 'z';
+//		System.out.println((char) (122 - testValue + 97));
+//		
+//		System.out.println(EvaluationService.AtbashCipher.encode("abcdefghijklmnop"));
 		
+//		System.out.println(EvaluationService.AtbashCipher.atbashChar('7'));
 		
-		
-		
+//		nooo.solveWordProblem("What is 6 multiplied 4 by 4?");
+//		
+//		try {
+//			Integer.parseInt("hi");
+//		}
+//		catch (NumberFormatException e) {
+//			System.out.println("dont know");
+//		}
 		
 	}
 }
