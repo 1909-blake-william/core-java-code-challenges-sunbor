@@ -7,7 +7,6 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -467,6 +466,8 @@ public class EvaluationService {
 			//start loop from second letter
 			//first two letters are qu
 			//start loop from third letter
+			//first two letters are th
+			//start loop from third letter
 			//get index of first vowel
 			
 			//first letter is y
@@ -481,6 +482,15 @@ public class EvaluationService {
 			}
 			//first two letters are qu
 			else if(string.charAt(0) == 'q' && string.charAt(1) == 'u') {
+				for(int i=2; i<string.length(); i++) {
+					if(isVowel(string.charAt(i), true)) {
+						vowelIndex = i;
+						break;
+					}
+				}
+			}
+			//first two letters are th
+			else if(string.charAt(0) == 't' && string.charAt(1) == 'h') {
 				for(int i=2; i<string.length(); i++) {
 					if(isVowel(string.charAt(i), true)) {
 						vowelIndex = i;
@@ -1150,6 +1160,7 @@ public class EvaluationService {
 		}
 		
 		//get operator
+		//see if one of the words is an operation
 		int result = 0;
 		for(int i=0; i<words.length; i++) {
 			switch (words[i]) {
@@ -1173,7 +1184,6 @@ public class EvaluationService {
 //		for(int i=0; i<operands.size(); i++) {
 //			System.out.println(operands.get(i));
 //		}
-		//see if one of the words is an operation
 		return result;
 	}
 
